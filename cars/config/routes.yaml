@@ -1,0 +1,60 @@
+api_login_check:
+    path: /api/login_check
+
+api_refresh_token:
+    path: /api/token/refresh
+
+add_user:
+    path:       /api/v1/user/create
+    controller: App\Controller\UserController::addUser
+    methods:    POST
+
+update_user:
+    path:       /api/v1/user/update/{email}
+    controller: App\Controller\UserController::updateUser
+    methods:    PUT
+
+delete_user:
+    path:       /api/v1/user/delete/{email}
+    controller: App\Controller\UserController::deleteUser
+    methods:    DELETE
+
+get_all_users:
+    path:       /api/v1/users/page/{page}
+    controller: App\Controller\UserController::getAllUsers
+    methods:    GET
+
+get_user_email:
+    path:       /api/v1/user/email/{email}
+    controller: App\Controller\UserController::getUserFromEmail
+    methods:    GET
+
+add_car:
+    path:       /api/v1/car/create
+    controller: App\Controller\CarController::addCar
+    methods:    POST
+
+update_car:
+    path:       /api/v1/car/update/{id}
+    controller: App\Controller\CarController::updateCar
+    methods:    PUT
+
+delete_car:
+    path:       /api/v1/car/delete/{id}
+    controller: App\Controller\CarController::deleteCar
+    methods:    DELETE
+
+get_all_cars:
+    path:       /api/v1/cars/page/{page}
+    controller: App\Controller\CarController::getAllCars
+    methods:    GET
+
+get_all_cars_enabled:
+    path:       /api/v1/cars/enabled/page/{page}
+    controller: App\Controller\CarController::getAllCarsEnabled
+    methods:    GET
+
+get_car_id:
+    path:       /api/v1/car/id/{id}
+    controller: App\Controller\CarController::getCarFromId
+    methods:    GET
