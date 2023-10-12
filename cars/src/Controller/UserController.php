@@ -58,8 +58,6 @@ class UserController
                 $bus->dispatch(new SendEmail($msg, $subject));
             }
 
-            $bus->dispatch(new SendEmail($msg, $subject));
-
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
             return new JsonResponse(['error'=> $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -75,9 +73,9 @@ class UserController
             if(!$result['error']) {
                 $msg = 'User deleted with id ' . $result['id'];
                 $subject = 'User deleted';
-            }
 
-            $bus->dispatch(new SendEmail($msg, $subject));
+                $bus->dispatch(new SendEmail($msg, $subject));
+            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
