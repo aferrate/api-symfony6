@@ -23,13 +23,15 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
     {
         $user = $this->userReadRepo->findOneByEmail($updateUserCommand->email);
 
-        if (is_null($user)) {
+        if(is_null($user)) {
             return ['error' => true, 'status' => 'no user found!'];
         }
 
         if (!is_null($this->userReadRepo->checkEmailRepeated($updateUserCommand->params['email'], $user->getId()))) {
             return ['error' => true, 'status' => 'email already in use!'];
         }
+
+        $this->cacheClient->deleteIndex('user_'.$user->getEmail());
 
         $user->setEmail($updateUserCommand->params['email']);
         $user->setPassword($updateUserCommand->params['password']);

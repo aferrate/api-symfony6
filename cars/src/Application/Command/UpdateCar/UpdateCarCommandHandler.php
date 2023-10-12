@@ -38,6 +38,7 @@ class UpdateCarCommandHandler implements CommandHandlerInterface
             $this->carReadRepo->update($car);
         }
 
+        $this->cacheClient->deleteIndex('car_'.$car->getId());
         $this->cacheClient->putIndex($car->toArray(), 'car_'.$car->getId());
 
         return ['error' => false, 'status' => 'car updated!', 'id' => $car->getId()];

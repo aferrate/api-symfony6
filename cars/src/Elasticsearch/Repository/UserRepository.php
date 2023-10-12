@@ -32,7 +32,7 @@ class UserRepository implements UserRepositoryInterface
 
         $userElastic = $this->elasticClient->search($params);
 
-        if (empty($userElastic['hits']['hits'])) {
+        if(empty($userElastic['hits']['hits'])) {
             return null;
         }
 

@@ -29,13 +29,16 @@ class CarController
             $car = $car->buildCarFromArray($car, $data);
 
             $result = $bus->dispatch(new CreateCarCommand($car))->last(HandledStamp::class)->getResult();
+            $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            $msg = 'Car created with id '.$result['id'];
-            $subject = 'Car created';
+            if(!$result['error']) {
+                $msg = 'Car created with id '.$result['id'];
+                $subject = 'Car created';
 
-            $bus->dispatch(new SendEmail($msg, $subject));
+                $bus->dispatch(new SendEmail($msg, $subject));
+            }
 
-            return new JsonResponse($result, Response::HTTP_CREATED);
+            return new JsonResponse($result, $status);
         } catch (Exception $e) {
             return new JsonResponse(['error'=> $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
@@ -48,13 +51,14 @@ class CarController
 
             $result = $bus->dispatch(new UpdateCarCommand($id, $data))
                 ->last(HandledStamp::class)->getResult();
-
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            $msg = 'Car updated with id '.$result['id'];
-            $subject = 'Car updated';
+            if(!$result['error']) {
+                $msg = 'Car updated with id ' . $result['id'];
+                $subject = 'Car updated';
 
-            $bus->dispatch(new SendEmail($msg, $subject));
+                $bus->dispatch(new SendEmail($msg, $subject));
+            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
@@ -66,13 +70,14 @@ class CarController
     {
         try {
             $result = $bus->dispatch(new DeleteCarCommand($id))->last(HandledStamp::class)->getResult();
-
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            $msg = 'Car deleted with id '.$result['id'];
-            $subject = 'Car deleted';
+            if(!$result['error']) {
+                $msg = 'Car deleted with id ' . $result['id'];
+                $subject = 'Car deleted';
 
-            $bus->dispatch(new SendEmail($msg, $subject));
+                $bus->dispatch(new SendEmail($msg, $subject));
+            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {

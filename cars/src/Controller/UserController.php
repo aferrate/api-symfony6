@@ -27,13 +27,14 @@ class UserController
             $user = $user->buildUserFromArray($user, $data);
 
             $result = $bus->dispatch(new CreateUserCommand($user))->last(HandledStamp::class)->getResult();
-
             $status = ($result['error']) ? Response::HTTP_BAD_REQUEST : Response::HTTP_CREATED;
 
-            $msg = 'User created with id '.$result['id'];
-            $subject = 'User created';
+            if(!$result['error']) {
+                $msg = 'User created with id ' . $result['id'];
+                $subject = 'User created';
 
-            $bus->dispatch(new SendEmail($msg, $subject));
+                $bus->dispatch(new SendEmail($msg, $subject));
+            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
@@ -48,11 +49,14 @@ class UserController
 
             $result = $bus->dispatch(new UpdateUserCommand($email, $data))
                 ->last(HandledStamp::class)->getResult();
-
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            $msg = 'User updated with id '.$result['id'];
-            $subject = 'User updated';
+            if(!$result['error']) {
+                $msg = 'User updated with id '.$result['id'];
+                $subject = 'User updated';
+
+                $bus->dispatch(new SendEmail($msg, $subject));
+            }
 
             $bus->dispatch(new SendEmail($msg, $subject));
 
@@ -66,11 +70,12 @@ class UserController
     {
         try {
             $result = $bus->dispatch(new DeleteUserCommand($email))->last(HandledStamp::class)->getResult();
-
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            $msg = 'User deleted with id '.$result['id'];
-            $subject = 'User deleted';
+            if(!$result['error']) {
+                $msg = 'User deleted with id ' . $result['id'];
+                $subject = 'User deleted';
+            }
 
             $bus->dispatch(new SendEmail($msg, $subject));
 
