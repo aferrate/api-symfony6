@@ -25,6 +25,7 @@
         "symfony/messenger": "6.2.7",
         "symfony/runtime": "6.0.*",
         "symfony/security-bundle": "6.0.*",
+        "symfony/validator": "6.0.*",
         "symfony/yaml": "6.0.*"
     },
     "config": {
