@@ -2,6 +2,7 @@
 
 ### Features
 
+- [x] Docker
 - [x] Queue system
 - [x] Read and write DBs
 - [x] DDD approach
