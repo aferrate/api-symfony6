@@ -4,7 +4,7 @@ namespace App\Tests\Integration\Command;
 
 use App\Application\Command\CreateUser\CreateUserCommand;
 use App\Domain\Command\CommandBusInterface;
-use App\Elasticsearch\Repository\UserRepository as UserRepoElastic;
+use App\Factory\UserRepoFactory;
 use App\Entity\User;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -20,7 +20,7 @@ class CreateUserTest extends KernelTestCase
     {
         parent::setUp();
         $this->commandBus = $this::getContainer()->get(CommandBusInterface::class);
-        $this->userReadRepo = $this::getContainer()->get(UserRepoElastic::class);
+        $this->userReadRepo = $this::getContainer()->get(UserRepoFactory::class)->getUserReadRepo();
         $this->cache = $this::getContainer()->get(CacheRedis::class);
     }
 

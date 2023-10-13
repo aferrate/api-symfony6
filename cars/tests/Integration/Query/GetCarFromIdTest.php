@@ -3,10 +3,9 @@
 namespace App\Tests\Integration\Query;
 
 use App\Application\Query\GetCarFromId\GetCarFromIdQuery;
-use App\Doctrine\Repository\CarRepository;
 use App\Domain\Query\QueryBusInterface;
-use App\Elasticsearch\Repository\CarRepository as CarRepoElastic;
 use App\Entity\Car;
+use App\Factory\CarRepoFactory;
 use App\Services\CacheRedis;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -23,8 +22,8 @@ class GetCarFromIdTest extends KernelTestCase
     {
         parent::setUp();
         $this->queryBus = $this::getContainer()->get(QueryBusInterface::class);
-        $this->carReadRepo = $this::getContainer()->get(CarRepoElastic::class);
-        $this->carWriteRepo = $this::getContainer()->get(CarRepository::class);
+        $this->carReadRepo = $this::getContainer()->get(CarRepoFactory::class)->getCarReadRepo();
+        $this->carWriteRepo = $this::getContainer()->get(CarRepoFactory::class)->getCarWriteRepo();
         $this->cache = $this::getContainer()->get(CacheRedis::class);
     }
 

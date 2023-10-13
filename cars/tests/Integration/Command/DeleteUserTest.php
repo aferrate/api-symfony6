@@ -3,9 +3,8 @@
 namespace App\Tests\Integration\Command;
 
 use App\Application\Command\DeleteUser\DeleteUserCommand;
-use App\Doctrine\Repository\UserRepository;
 use App\Domain\Command\CommandBusInterface;
-use App\Elasticsearch\Repository\UserRepository as UserRepoElastic;
+use App\Factory\UserRepoFactory;
 use App\Entity\User;
 use App\Services\CacheRedis;
 use Ramsey\Uuid\Uuid;
@@ -23,8 +22,8 @@ class DeleteUserTest extends KernelTestCase
     {
         parent::setUp();
         $this->commandBus = $this::getContainer()->get(CommandBusInterface::class);
-        $this->userWriteRepo = $this::getContainer()->get(UserRepository::class);
-        $this->userReadRepo = $this::getContainer()->get(UserRepoElastic::class);
+        $this->userWriteRepo = $this::getContainer()->get(UserRepoFactory::class)->getUserWriteRepo();
+        $this->userReadRepo = $this::getContainer()->get(UserRepoFactory::class)->getUserReadRepo();
         $this->cache = $this::getContainer()->get(CacheRedis::class);
 
         $this->user = new User(Uuid::uuid4());

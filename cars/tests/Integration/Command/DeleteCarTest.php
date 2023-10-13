@@ -5,10 +5,9 @@ namespace App\Tests\Integration\Command;
 use App\Application\Command\DeleteCar\DeleteCarCommand;
 use App\Domain\Command\CommandBusInterface;
 use App\Entity\Car;
+use App\Factory\CarRepoFactory;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Doctrine\Repository\CarRepository;
-use App\Elasticsearch\Repository\CarRepository as CarRepoElastic;
 use App\Services\CacheRedis;
 use DateTime;
 
@@ -23,8 +22,8 @@ class DeleteCarTest extends KernelTestCase
     {
         parent::setUp();
         $this->commandBus = $this::getContainer()->get(CommandBusInterface::class);
-        $this->carWriteRepo = $this::getContainer()->get(CarRepository::class);
-        $this->carReadRepo = $this::getContainer()->get(CarRepoElastic::class);
+        $this->carWriteRepo = $this::getContainer()->get(CarRepoFactory::class)->getCarWriteRepo();
+        $this->carReadRepo = $this::getContainer()->get(CarRepoFactory::class)->getCarReadRepo();
         $this->cache = $this::getContainer()->get(CacheRedis::class);
     }
 

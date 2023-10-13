@@ -4,7 +4,7 @@ namespace App\Tests\Integration\Query;
 
 use App\Application\Query\GetAllCarsEnabled\GetAllCarsEnabledQuery;
 use App\Domain\Query\QueryBusInterface;
-use App\Elasticsearch\Repository\CarRepository as CarRepoElastic;
+use App\Factory\CarRepoFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class GetAllCarsEnabledTest extends KernelTestCase
@@ -16,7 +16,7 @@ class GetAllCarsEnabledTest extends KernelTestCase
     {
         parent::setUp();
         $this->queryBus = $this::getContainer()->get(QueryBusInterface::class);
-        $this->carReadRepo = $this::getContainer()->get(CarRepoElastic::class);
+        $this->carReadRepo = $this::getContainer()->get(CarRepoFactory::class)->getCarReadRepo();
     }
 
     public function testGetAllEnabledCars(): void

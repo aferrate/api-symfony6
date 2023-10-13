@@ -3,10 +3,9 @@
 namespace App\Tests\Integration\Command;
 
 use App\Application\Command\UpdateUser\UpdateUserCommand;
-use App\Doctrine\Repository\UserRepository;
 use App\Domain\Command\CommandBusInterface;
-use App\Elasticsearch\Repository\UserRepository as UserRepoElastic;
 use App\Entity\User;
+use App\Factory\UserRepoFactory;
 use App\Services\CacheRedis;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -22,8 +21,8 @@ class UpdateUserTest extends KernelTestCase
     {
         parent::setUp();
         $this->commandBus = $this::getContainer()->get(CommandBusInterface::class);
-        $this->userWriteRepo = $this::getContainer()->get(UserRepository::class);
-        $this->userReadRepo = $this::getContainer()->get(UserRepoElastic::class);
+        $this->userWriteRepo = $this::getContainer()->get(UserRepoFactory::class)->getUserWriteRepo();
+        $this->userReadRepo = $this::getContainer()->get(UserRepoFactory::class)->getUserReadRepo();
         $this->cache = $this::getContainer()->get(CacheRedis::class);
     }
 
