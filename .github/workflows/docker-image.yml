@@ -1,0 +1,34 @@
+name: Workflow for testing app
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: change directory
+      run: cd laradock
+    - name: start containers
+      run: docker-compose up -d nginx mysql phpmyadmin redis elasticsearch
+    - name: install libraries
+      run: docker-compose --file ./docker-compose.yml exec workspace composer install
+    - name: create db
+      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console doctrine:database:create
+    - name: add migrations
+      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console doctrine:migrations:migrate
+    - name: add elasticsearch index cars
+      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console app:create-elasticsearch-cars-index
+    - name: add elasticsearch index users
+      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console app:create-elasticsearch-users-index
+    - name: run fixtures
+      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console doctrine:fixtures:load
+    - name: run tests
+      run: docker-compose --file ./docker-compose.yml exec workspace ./vendor/bin/phpunit
