@@ -17,18 +17,18 @@ jobs:
     - name: change directory
       run: cd laradock
     - name: start containers
-      run: docker-compose --file ./docker-compose.yml up -d nginx mysql phpmyadmin redis elasticsearch
+      run: docker-compose --file docker-compose.yml up -d nginx mysql phpmyadmin redis elasticsearch
     - name: install libraries
-      run: docker-compose --file ./docker-compose.yml exec workspace composer install
+      run: docker-compose --file docker-compose.yml exec workspace composer install
     - name: create db
-      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console doctrine:database:create
+      run: docker-compose --file docker-compose.yml exec workspace php bin/console doctrine:database:create
     - name: add migrations
-      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console doctrine:migrations:migrate
+      run: docker-compose --file docker-compose.yml exec workspace php bin/console doctrine:migrations:migrate
     - name: add elasticsearch index cars
-      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console app:create-elasticsearch-cars-index
+      run: docker-compose --file docker-compose.yml exec workspace php bin/console app:create-elasticsearch-cars-index
     - name: add elasticsearch index users
-      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console app:create-elasticsearch-users-index
+      run: docker-compose --file docker-compose.yml exec workspace php bin/console app:create-elasticsearch-users-index
     - name: run fixtures
-      run: docker-compose --file ./docker-compose.yml exec workspace php bin/console doctrine:fixtures:load
+      run: docker-compose --file docker-compose.yml exec workspace php bin/console doctrine:fixtures:load
     - name: run tests
-      run: docker-compose --file ./docker-compose.yml exec workspace ./vendor/bin/phpunit
+      run: docker-compose --file docker-compose.yml exec workspace ./vendor/bin/phpunit
