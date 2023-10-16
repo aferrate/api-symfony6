@@ -14,18 +14,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: wsl
-      run: wsl -d docker-desktop
     - name: increase memory for elasticsearch container
-      run: sudo sysctl -w vm.max_map_count=262144
+      run: sudo sysctl -w vm.max_map_count=292144
+    - name: see memory
+      run: grep vm.max_map_count /etc/sysctl.conf
     - name: start containers
-      run: docker-compose --file laradock/docker-compose.yml up -d nginx mysql phpmyadmin redis elasticsearch
+      run: docker-compose --file laradock/docker-compose.yml up -d nginx mysql redis elasticsearch rabbitmq
     - name: install libraries
       run: docker-compose --file laradock/docker-compose.yml exec -T workspace composer install
     - name: create db
       run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console doctrine:database:create
     - name: add migrations
       run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console doctrine:migrations:migrate
+    - name: see docker logs
+      run: docker logs laradock_elasticsearch_1
     - name: add elasticsearch index cars
       run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console app:create-elasticsearch-cars-index
     - name: add elasticsearch index users
