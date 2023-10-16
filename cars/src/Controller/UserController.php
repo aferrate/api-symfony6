@@ -83,7 +83,7 @@ class UserController
     public function deleteUser(string $email, MessageBusInterface $bus): JsonResponse
     {
         try {
-            if (!$this->validator->validateDeleteUserRequest($email)) {
+            if (!$this->validator->validateDeleteUserRequest(['email' => $email])) {
                 return new JsonResponse(['error'=> 'bad params'], Response::HTTP_BAD_REQUEST);
             }
 
@@ -106,7 +106,7 @@ class UserController
     public function getAllUsers(int $page, MessageBusInterface $queryBus): JsonResponse
     {
         try {
-            if (!$this->validator->validateGetAllUsersRequest($page)) {
+            if (!$this->validator->validateGetAllUsersRequest(['page' => $page])) {
                 return new JsonResponse(['error'=> 'bad params'], Response::HTTP_BAD_REQUEST);
             }
 

@@ -55,7 +55,7 @@ class ValidatorUserRequest implements  ValidatorUserRequestInterface
         return true;
     }
 
-    public function validateDeleteUserRequest(string $id): bool
+    public function validateDeleteUserRequest(array $email): bool
     {
         $constraints = new Assert\Collection([
             'email' => [
@@ -63,7 +63,7 @@ class ValidatorUserRequest implements  ValidatorUserRequestInterface
             ],
         ]);
 
-        $errors = $this->validator->validate($id, $constraints);
+        $errors = $this->validator->validate($email, $constraints);
 
         if ($errors->count()) {
             return false;
@@ -72,7 +72,7 @@ class ValidatorUserRequest implements  ValidatorUserRequestInterface
         return true;
     }
 
-    public function validateGetAllUsersRequest(int $page): bool
+    public function validateGetAllUsersRequest(array $page): bool
     {
         $constraints = new Assert\Collection([
             'page' => [
@@ -89,7 +89,7 @@ class ValidatorUserRequest implements  ValidatorUserRequestInterface
         return true;
     }
 
-    public function validateGetUserFromEmailRequest(string $id): bool
+    public function validateGetUserFromEmailRequest(string $email): bool
     {
         $constraints = new Assert\Collection([
             'email' => [
@@ -97,7 +97,7 @@ class ValidatorUserRequest implements  ValidatorUserRequestInterface
             ],
         ]);
 
-        $errors = $this->validator->validate($id, $constraints);
+        $errors = $this->validator->validate(['email' => $email], $constraints);
 
         if ($errors->count()) {
             return false;
