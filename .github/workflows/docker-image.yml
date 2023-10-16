@@ -17,7 +17,7 @@ jobs:
     - name: change directory
       run: cd laradock
     - name: start containers
-      run: docker-compose --file docker-compose.yml up -d nginx mysql phpmyadmin redis elasticsearch
+      run: ls
     - name: install libraries
       run: docker-compose --file docker-compose.yml exec workspace composer install
     - name: create db
