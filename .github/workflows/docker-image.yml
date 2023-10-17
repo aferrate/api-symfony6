@@ -16,14 +16,14 @@ jobs:
     - uses: actions/checkout@v3
     - name: increase memory for elasticsearch container
       run: sudo sysctl -w vm.max_map_count=392144
+    - name: stop containers
+      run: docker-compose --file laradock/docker-compose.yml down
     - name: prune images
       run: docker system prune -af
     - name: start containers
       run: docker-compose --file laradock/docker-compose.yml up -d nginx mysql redis elasticsearch rabbitmq
     - name: see containers
       run: docker ps
-    - name: log containers
-      run: docker logs laradock_elasticsearch_1
     - name: install libraries
       run: docker-compose --file laradock/docker-compose.yml exec -T workspace composer install
     - name: create db
