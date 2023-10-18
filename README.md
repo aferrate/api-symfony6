@@ -11,7 +11,8 @@
 ### Start application:
 ```
 cd laradock
-docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq
+.\php-fpm\xdebug start
+docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq php-fpm
 ```
 
 ### Get into the container:

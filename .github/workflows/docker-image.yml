@@ -22,8 +22,6 @@ jobs:
       run: docker system prune -af
     - name: start containers
       run: docker-compose --file laradock/docker-compose.yml up -d nginx mysql redis elasticsearch rabbitmq
-    - name: see containers
-      run: docker ps
     - name: install libraries
       run: docker-compose --file laradock/docker-compose.yml exec -T workspace composer install
     - name: create db
