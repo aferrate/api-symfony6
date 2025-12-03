@@ -12,6 +12,7 @@ use App\Domain\Model\Car;
 use App\Infrastructure\Services\CacheRedis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use App\Domain\Exception\CarNotFoundException;
 
 class DeleteCarCommandHandlerTest extends TestCase
 {
@@ -77,9 +78,9 @@ class DeleteCarCommandHandlerTest extends TestCase
             ->with(999)
             ->willReturn(null);
 
-        $result = ($this->handler)($deleteCarCommand);
+        $this->expectException(CarNotFoundException::class);
 
-        $this->assertEquals(['error' => true, 'status' => 'no car found!'], $result);
+        $result = ($this->handler)($deleteCarCommand);
     }
 
     public function testDeleteCarFailsWhenCarIdIsNull()
@@ -88,6 +89,8 @@ class DeleteCarCommandHandlerTest extends TestCase
 
         $deleteCarCommand = $this->createMock(DeleteCarCommand::class);
         $deleteCarCommand->id = null;
+
+        $this->expectException(CarNotFoundException::class);
 
         ($this->handler)($deleteCarCommand);
     }

@@ -13,6 +13,7 @@ use App\Infrastructure\Services\CacheRedis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use DateTime;
+use App\Domain\Exception\CarNotFoundException;
 
 class UpdateCarCommandHandlerTest extends TestCase
 {
@@ -87,9 +88,9 @@ class UpdateCarCommandHandlerTest extends TestCase
             ->with(999)
             ->willReturn(null);
 
+        $this->expectException(CarNotFoundException::class);
+        
         $result = ($this->handler)($updateCarCommand);
-
-        $this->assertEquals(['error' => true, 'status' => 'no car found!'], $result);
     }
 
     public function testUpdateCarFailsWhenCarIdIsNull()
