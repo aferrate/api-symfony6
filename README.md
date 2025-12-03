@@ -11,7 +11,6 @@
 ### Start application:
 ```
 cd laradock
-.\php-fpm\xdebug start
 cp .env.example .env
 sudo docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq php-fpm
 ```

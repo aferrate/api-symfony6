@@ -37,7 +37,7 @@ class ValidatorCarRequest implements ValidatorCarRequestInterface
                 new Assert\NotBlank()
             ],
             'enabled' => [
-                new Assert\NotBlank()
+                new Assert\NotNull()
             ],
             'imageFilename' => [
                 new Assert\NotBlank()
