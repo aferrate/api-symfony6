@@ -1,0 +1,54 @@
+App\Entity\Car:
+  type: entity
+  table: cars
+  repositoryClass: App\Doctrine\Repository\CarRepository
+  id:
+    id:
+      type: uuid
+  fields:
+    mark:
+      type: string
+      length: 255
+      nullable: false
+      column: mark
+    model:
+      type: string
+      length: 255
+      nullable: false
+      column: model
+    description:
+      type: text
+      nullable: false
+      column: description
+    country:
+      type: string
+      length: 255
+      nullable: false
+      column: country
+    city:
+      type: string
+      length: 255
+      nullable: false
+      column: city
+    year:
+      type: integer
+      nullable: false
+      column: year
+      options:
+        unsigned: true
+    enabled:
+      type: boolean
+      column: enabled
+    imageFilename:
+      type: string
+      length: 255
+      nullable: false
+      column: image_filename
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

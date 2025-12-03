@@ -1,0 +1,38 @@
+name: Workflow for testing app
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: increase memory for elasticsearch container
+      run: sudo sysctl -w vm.max_map_count=392144
+    - name: stop containers
+      run: docker-compose --file laradock/docker-compose.yml down
+    - name: prune images
+      run: docker system prune -af
+    - name: start containers
+      run: docker-compose --file laradock/docker-compose.yml up -d nginx mysql redis elasticsearch rabbitmq
+    - name: install libraries
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace composer install
+    - name: create db
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console doctrine:database:create
+    - name: add migrations
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console doctrine:migrations:migrate
+    - name: add elasticsearch index cars
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console app:create-elasticsearch-cars-index
+    - name: add elasticsearch index users
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console app:create-elasticsearch-users-index
+    - name: run fixtures
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace php bin/console doctrine:fixtures:load
+    - name: run tests
+      run: docker-compose --file laradock/docker-compose.yml exec -T workspace phpunit ./tests
