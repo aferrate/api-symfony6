@@ -4,11 +4,11 @@ namespace App\Tests\Integration\Command;
 
 use App\Application\Command\CreateUser\CreateUserCommand;
 use App\Domain\Command\CommandBusInterface;
-use App\Factory\UserRepoFactory;
-use App\Entity\User;
+use App\Infrastructure\Factory\UserRepoFactory;
+use App\Infrastructure\Entity\User;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Services\CacheRedis;
+use App\Infrastructure\Services\CacheRedis;
 
 class CreateUserTest extends KernelTestCase
 {

@@ -5,6 +5,7 @@ namespace App\Application\Command\DeleteCar;
 use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\CarRepoFactoryInterface;
+use App\Domain\Exception\CarNotFoundException;
 
 class DeleteCarCommandHandler implements CommandHandlerInterface
 {
@@ -24,7 +25,7 @@ class DeleteCarCommandHandler implements CommandHandlerInterface
         $car = $this->carReadRepo->findOneCarById($deleteCarCommand->id);
 
         if(is_null($car)) {
-            return ['error' => true, 'status' => 'no car found!'];
+            throw new CarNotFoundException();
         }
 
         $this->carWriteRepo->delete($car);

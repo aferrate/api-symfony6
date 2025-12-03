@@ -5,6 +5,7 @@ namespace App\Application\Query\GetCarFromId;
 use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Factory\CarRepoFactoryInterface;
 use App\Domain\Query\QueryHandlerInterface;
+use App\Domain\Exception\CarNotFoundException;
 
 class GetCarFromIdQueryHandler implements QueryHandlerInterface
 {
@@ -28,7 +29,7 @@ class GetCarFromIdQueryHandler implements QueryHandlerInterface
         $car = $this->carReadRepo->findOneCarById($getCarFromIdQuery->id);
 
         if(is_null($car)) {
-            return ['error' => true, 'status' => 'no car found!'];
+            throw new CarNotFoundException();
         }
 
         $this->cacheClient->putIndex($car->toArray(), 'car_'.$car->getId());

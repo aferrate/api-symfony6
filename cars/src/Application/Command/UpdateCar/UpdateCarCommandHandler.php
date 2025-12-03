@@ -6,6 +6,7 @@ use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\CarRepoFactoryInterface;
 use DateTime;
+use App\Domain\Exception\CarNotFoundException;
 
 class UpdateCarCommandHandler implements CommandHandlerInterface
 {
@@ -25,7 +26,7 @@ class UpdateCarCommandHandler implements CommandHandlerInterface
         $car = $this->carReadRepo->findOneCarById($updateCarCommand->id);
 
         if (is_null($car)) {
-            return ['error' => true, 'status' => 'no car found!'];
+            throw new CarNotFoundException();
         }
 
         $updateCarCommand->params['id'] = $car->getId();

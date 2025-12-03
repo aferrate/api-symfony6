@@ -4,9 +4,9 @@ namespace App\Tests\Integration\Command;
 
 use App\Application\Command\UpdateUser\UpdateUserCommand;
 use App\Domain\Command\CommandBusInterface;
-use App\Entity\User;
-use App\Factory\UserRepoFactory;
-use App\Services\CacheRedis;
+use App\Infrastructure\Entity\User;
+use App\Infrastructure\Factory\UserRepoFactory;
+use App\Infrastructure\Services\CacheRedis;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

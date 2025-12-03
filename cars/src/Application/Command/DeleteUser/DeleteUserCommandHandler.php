@@ -5,6 +5,7 @@ namespace App\Application\Command\DeleteUser;
 use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\UserRepoFactoryInterface;
+use App\Domain\Exception\UserNotFoundException;
 
 class DeleteUserCommandHandler implements CommandHandlerInterface
 {
@@ -24,7 +25,7 @@ class DeleteUserCommandHandler implements CommandHandlerInterface
         $user = $this->userReadRepo->findOneByEmail($deleteUserCommand->email);
 
         if(is_null($user)) {
-            return ['error' => true, 'status' => 'no user found!'];
+            throw new UserNotFoundException();
         }
 
         $this->userWriteRepo->delete($user);

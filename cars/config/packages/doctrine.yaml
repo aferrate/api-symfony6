@@ -14,5 +14,5 @@ doctrine:
                 is_bundle: false
                 type: yml
                 dir: '%kernel.project_dir%/config/doctrine'
-                prefix: 'App\Entity'
+                prefix: 'App\Infrastructure\Entity'
                 alias: App

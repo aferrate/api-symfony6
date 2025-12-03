@@ -5,6 +5,8 @@ namespace App\Application\Command\UpdateUser;
 use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\UserRepoFactoryInterface;
+use App\Domain\Exception\UserNotFoundException;
+use App\Domain\Exception\EmailAlreadyInUseException;
 
 class UpdateUserCommandHandler implements CommandHandlerInterface
 {
@@ -24,11 +26,11 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
         $user = $this->userReadRepo->findOneByEmail($updateUserCommand->email);
         
         if(is_null($user)) {
-            return ['error' => true, 'status' => 'no user found!'];
+            throw new UserNotFoundException();
         }
         
         if (!is_null($this->userReadRepo->checkEmailRepeated($updateUserCommand->user->getEmail(), $user->getId()))) {
-            return ['error' => true, 'status' => 'email already in use!'];
+            throw new EmailAlreadyInUseException();
         }
 
         $this->cacheClient->deleteIndex('user_'.$user->getEmail());

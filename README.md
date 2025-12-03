@@ -62,6 +62,7 @@ php bin/console messenger:consume async -vv
 ```
 phpunit ./tests/Feature
 phpunit ./tests/Integration
+phpunit ./tests/Unit
 ```
 
 ### Stop application:

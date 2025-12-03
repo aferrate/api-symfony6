@@ -4,9 +4,9 @@ namespace App\Tests\Integration\Query;
 
 use App\Application\Query\GetUserFromEmail\GetUserFromEmailQuery;
 use App\Domain\Query\QueryBusInterface;
-use App\Entity\User;
-use App\Factory\UserRepoFactory;
-use App\Services\CacheRedis;
+use App\Infrastructure\Entity\User;
+use App\Infrastructure\Factory\UserRepoFactory;
+use App\Infrastructure\Services\CacheRedis;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

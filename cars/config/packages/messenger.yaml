@@ -22,7 +22,7 @@ framework:
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
-            'App\Message\SendEmail': async
+            'App\Infrastructure\Message\SendEmail': async
 
 # when@test:
 #    framework:

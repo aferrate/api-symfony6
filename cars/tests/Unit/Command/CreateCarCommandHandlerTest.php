@@ -4,12 +4,12 @@ namespace App\Tests\Unit\Command;
 
 use App\Application\Command\CreateCar\CreateCarCommandHandler;
 use App\Application\Command\CreateCar\CreateCarCommand;
-use App\Factory\CacheFactory;
-use App\Factory\CarRepoFactory;
-use App\Doctrine\Repository\CarRepository as CarWriteRepository;
-use App\Elasticsearch\Repository\CarRepository as CarReadRepository;
+use App\Infrastructure\Factory\CacheFactory;
+use App\Infrastructure\Factory\CarRepoFactory;
+use App\Infrastructure\Doctrine\Repository\CarRepository as CarWriteRepository;
+use App\Infrastructure\Elasticsearch\Repository\CarRepository as CarReadRepository;
 use App\Domain\Model\Car;
-use App\Services\CacheRedis;
+use App\Infrastructure\Services\CacheRedis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use DateTime;

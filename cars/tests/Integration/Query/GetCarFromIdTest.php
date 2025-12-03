@@ -4,9 +4,9 @@ namespace App\Tests\Integration\Query;
 
 use App\Application\Query\GetCarFromId\GetCarFromIdQuery;
 use App\Domain\Query\QueryBusInterface;
-use App\Entity\Car;
-use App\Factory\CarRepoFactory;
-use App\Services\CacheRedis;
+use App\Infrastructure\Entity\Car;
+use App\Infrastructure\Factory\CarRepoFactory;
+use App\Infrastructure\Services\CacheRedis;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use DateTime;

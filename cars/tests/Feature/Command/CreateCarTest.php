@@ -2,8 +2,8 @@
 
 namespace App\Tests\Feature\Command;
 
-use App\Factory\CarRepoFactory;
-use App\Services\CacheRedis;
+use App\Infrastructure\Factory\CarRepoFactory;
+use App\Infrastructure\Services\CacheRedis;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CreateCarTest extends WebTestCase

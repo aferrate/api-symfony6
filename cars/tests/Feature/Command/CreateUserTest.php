@@ -2,8 +2,8 @@
 
 namespace App\Tests\Feature\Command;
 
-use App\Factory\UserRepoFactory;
-use App\Services\CacheRedis;
+use App\Infrastructure\Factory\UserRepoFactory;
+use App\Infrastructure\Services\CacheRedis;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CreateUserTest extends WebTestCase

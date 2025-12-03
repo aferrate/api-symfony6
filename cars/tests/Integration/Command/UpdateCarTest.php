@@ -4,11 +4,11 @@ namespace App\Tests\Integration\Command;
 
 use App\Application\Command\UpdateCar\UpdateCarCommand;
 use App\Domain\Command\CommandBusInterface;
-use App\Entity\Car;
-use App\Factory\CarRepoFactory;
+use App\Infrastructure\Entity\Car;
+use App\Infrastructure\Factory\CarRepoFactory;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Services\CacheRedis;
+use App\Infrastructure\Services\CacheRedis;
 use DateTime;
 
 class UpdateCarTest extends KernelTestCase

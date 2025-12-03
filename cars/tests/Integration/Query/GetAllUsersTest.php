@@ -4,7 +4,7 @@ namespace App\Tests\Integration\Query;
 
 use App\Application\Query\GetAllUsers\GetAllUsersQuery;
 use App\Domain\Query\QueryBusInterface;
-use App\Factory\UserRepoFactory;
+use App\Infrastructure\Factory\UserRepoFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class GetAllUsersTest extends KernelTestCase

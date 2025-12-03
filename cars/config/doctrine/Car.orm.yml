@@ -1,7 +1,7 @@
-App\Entity\Car:
+App\Infrastructure\Entity\Car:
   type: entity
   table: cars
-  repositoryClass: App\Doctrine\Repository\CarRepository
+  repositoryClass: App\Infrastructure\Doctrine\Repository\CarRepository
   id:
     id:
       type: uuid

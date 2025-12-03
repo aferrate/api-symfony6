@@ -5,6 +5,7 @@ namespace App\Application\Query\GetUserFromEmail;
 use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Factory\UserRepoFactoryInterface;
 use App\Domain\Query\QueryHandlerInterface;
+use App\Domain\Exception\UserNotFoundException;
 
 class GetUserFromEmailQueryHandler implements QueryHandlerInterface
 {
@@ -28,7 +29,7 @@ class GetUserFromEmailQueryHandler implements QueryHandlerInterface
         $user = $this->userReadRepo->findOneByEmail($qetUserFromEmailQuery->email);
 
         if(is_null($user)) {
-            return ['error' => true, 'status' => 'no user found!'];
+            throw new UserNotFoundException();
         }
 
         $this->cacheClient->putIndex($user->toArray(), 'user_'.$user->getEmail());

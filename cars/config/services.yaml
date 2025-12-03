@@ -17,31 +17,31 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/Infrastructure/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
+    App\Infrastructure\Controller\:
+        resource: '../src/Infrastructure/Controller'
         tags: [ 'controller.service_arguments' ]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Elasticsearch\Repository\CarRepository: ~
-    App\Doctrine\Repository\CarRepository: ~
-    App\Elasticsearch\Repository\UserRepository: ~
-    App\Doctrine\Repository\UserRepository: ~
+    App\Infrastructure\Elasticsearch\Repository\CarRepository: ~
+    App\Infrastructure\Doctrine\Repository\CarRepository: ~
+    App\Infrastructure\Elasticsearch\Repository\UserRepository: ~
+    App\Infrastructure\Doctrine\Repository\UserRepository: ~
 
-    App\Domain\Repository\CarRepositoryInterface $carRepoBackup: '@App\Elasticsearch\Repository\CarRepository'
-    App\Domain\Repository\CarRepositoryInterface: '@App\Doctrine\Repository\CarRepository'
-    App\Domain\Repository\UserRepositoryInterface $userRepoBackup: '@App\Elasticsearch\Repository\UserRepository'
-    App\Domain\Repository\UserRepositoryInterface: '@App\Doctrine\Repository\UserRepository'
+    App\Domain\Repository\CarRepositoryInterface $carRepoBackup: '@App\Infrastructure\Elasticsearch\Repository\CarRepository'
+    App\Domain\Repository\CarRepositoryInterface: '@App\Infrastructure\Doctrine\Repository\CarRepository'
+    App\Domain\Repository\UserRepositoryInterface $userRepoBackup: '@App\Infrastructure\Elasticsearch\Repository\UserRepository'
+    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Doctrine\Repository\UserRepository'
 
-    App\Domain\Cache\CacheInterface $cacheRedis: '@App\Services\CacheRedis'
-    App\Domain\Cache\CacheInterface $cacheLogger: '@App\Services\CacheDecoratorLog'
+    App\Domain\Cache\CacheInterface $cacheRedis: '@App\Infrastructure\Services\CacheRedis'
+    App\Domain\Cache\CacheInterface $cacheLogger: '@App\Infrastructure\Services\CacheDecoratorLog'
 
     _instanceof:
         App\Domain\Command\CommandHandlerInterface:
@@ -52,7 +52,7 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: query.bus }
 
-    App\EventListener\JWTCreatedListener:
+    App\Infrastructure\EventListener\JWTCreatedListener:
         arguments: [ '@request_stack' ]
         tags:
             - {
@@ -61,7 +61,7 @@ services:
                 method: onJWTCreated
             }
 
-    App\EventListener\JWTDecodedListener:
+    App\Infrastructure\EventListener\JWTDecodedListener:
         arguments: [ '@request_stack' ]
         tags:
             - {
@@ -70,7 +70,7 @@ services:
                 method: onJWTDecoded
             }
 
-    App\EventListener\JWTAuthenticationSuccessListener:
+    App\Infrastructure\EventListener\JWTAuthenticationSuccessListener:
         tags:
             - {
                 name: kernel.event_listener,
@@ -79,8 +79,8 @@ services:
                 priority: -1000,
             }
 
-    App\Bus\CommandBus:
+    App\Infrastructure\Bus\CommandBus:
         public: true
 
-    App\Bus\QueryBus:
+    App\Infrastructure\Bus\QueryBus:
         public: true

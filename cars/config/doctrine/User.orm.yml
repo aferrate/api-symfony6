@@ -1,7 +1,7 @@
-App\Entity\User:
+App\Infrastructure\Entity\User:
   type: entity
   table: users
-  repositoryClass: App\Doctrine\Repository\UserRepository
+  repositoryClass: App\Infrastructure\Doctrine\Repository\UserRepository
   id:
     id:
       type: uuid

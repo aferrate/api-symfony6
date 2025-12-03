@@ -5,6 +5,7 @@ namespace App\Application\Command\CreateUser;
 use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\UserRepoFactoryInterface;
+use App\Domain\Exception\EmailAlreadyInUseException;
 
 class CreateUserCommandHandler implements CommandHandlerInterface
 {
@@ -22,7 +23,7 @@ class CreateUserCommandHandler implements CommandHandlerInterface
     public function __invoke(CreateUserCommand $createUserCommand): array
     {
         if(!is_null($this->userReadRepo->findOneByEmail($createUserCommand->user->getEmail()))) {
-            return ['error' => true, 'status' => 'failed', 'message' => 'email already registered'];
+            throw new EmailAlreadyInUseException();
         }
 
         $this->userWriteRepo->save($createUserCommand->user);

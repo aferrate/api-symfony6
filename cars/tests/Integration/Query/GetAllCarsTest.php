@@ -4,7 +4,7 @@ namespace App\Tests\Integration\Query;
 
 use App\Application\Query\GetAllCars\GetAllCarsQuery;
 use App\Domain\Query\QueryBusInterface;
-use App\Factory\CarRepoFactory;
+use App\Infrastructure\Factory\CarRepoFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class GetAllCarsTest extends KernelTestCase
