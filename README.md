@@ -15,6 +15,11 @@ cp .env.example .env
 sudo docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq php-fpm
 ```
 
+### Start xdebug:
+```
+.\php-fpm\xdebug start
+```
+
 ### Get into the container:
 ```
 sudo docker-compose exec workspace bash
