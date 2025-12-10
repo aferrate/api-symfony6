@@ -26,12 +26,11 @@ class UpdateUserTest extends KernelTestCase
         $this->cache = $this::getContainer()->get(CacheRedis::class);
     }
 
-    public function testUpdateCar(): void
+    public function testUpdateUser(): void
     {
         $user = new User(Uuid::uuid4());
         $user->setEmail('testIntegration@test.com');
         $user->setPassword('testIntegration');
-        $arrayUser = ['email' => 'testIntegration2@test.com', 'password' => 'testIntegration2'];
 
         $this->userWriteRepo->save($user);
         $this->userReadRepo->save($user);
@@ -39,7 +38,10 @@ class UpdateUserTest extends KernelTestCase
 
         sleep(10);
 
-        $result = $this->commandBus->execute(new UpdateUserCommand('testIntegration@test.com', $arrayUser));
+        $user->setEmail('testIntegration222@test.com');
+        $user->setPassword('testIntegration2222222');
+
+        $result = $this->commandBus->execute(new UpdateUserCommand($user ,'testIntegration@test.com'));
 
         $this->userReadRepo->delete($user);
         $this->cache->deleteIndex('user_'.$user->getEmail());

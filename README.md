@@ -101,7 +101,7 @@ guest
 #### Access redis web-ui: [http://localhost:9987](http://localhost:9987)
 - Start container
 ```
-docker-compose up -d redis-webui
+sudo docker-compose up -d redis-webui
 ```
 - Credentials:
 ```
