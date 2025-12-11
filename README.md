@@ -12,7 +12,7 @@
 ```
 cd laradock
 cp .env.example .env
-sudo docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq php-fpm
+sudo docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq php-fpm redis-webui
 ```
 
 ### Start xdebug:
@@ -99,10 +99,6 @@ guest
 ```
 
 #### Access redis web-ui: [http://localhost:9987](http://localhost:9987)
-- Start container
-```
-sudo docker-compose up -d redis-webui
-```
 - Credentials:
 ```
 laradock
