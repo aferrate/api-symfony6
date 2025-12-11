@@ -2,22 +2,23 @@
 
 namespace App\Application\Command\DeleteCar;
 
-use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\CarRepoFactoryInterface;
 use App\Domain\Exception\CarNotFoundException;
+use App\Domain\Event\DomainEventDispatcherInterface;
+use App\Domain\Event\CarDeletedEvent;
 
 class DeleteCarCommandHandler implements CommandHandlerInterface
 {
     private $carReadRepo;
     private $carWriteRepo;
-    private $cacheClient;
+    private $eventDispatcher;
 
-    public function __construct(CarRepoFactoryInterface $carRepoFactory, CacheFactoryInterface $cacheFactory)
+    public function __construct(CarRepoFactoryInterface $carRepoFactory, DomainEventDispatcherInterface $eventDispatcher)
     {
         $this->carReadRepo = $carRepoFactory->getCarReadRepo();
         $this->carWriteRepo = $carRepoFactory->getCarWriteRepo();
-        $this->cacheClient = $cacheFactory->getCache();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(DeleteCarCommand $deleteCarCommand): array
@@ -34,7 +35,7 @@ class DeleteCarCommandHandler implements CommandHandlerInterface
             $this->carReadRepo->delete($car);
         }
 
-        $this->cacheClient->deleteIndex('car_'.$car->getId());
+        $this->eventDispatcher->dispatch(new CarDeletedEvent($deleteCarCommand->id));
 
         return ['error' => false, 'status' => 'car deleted!', 'id' => $car->getId()];
     }

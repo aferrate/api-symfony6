@@ -13,7 +13,6 @@ use App\Application\Command\DeleteCar\DeleteCarCommand;
 use App\Application\Query\GetAllCars\GetAllCarsQuery;
 use App\Application\Query\GetAllCarsEnabled\GetAllCarsEnabledQuery;
 use App\Application\Query\GetCarFromId\GetCarFromIdQuery;
-use App\Infrastructure\Message\SendEmail;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Exception;
 use App\Domain\Validator\Request\Car\ValidatorCarRequestInterface;
@@ -43,13 +42,6 @@ class CarController
             $result = $bus->dispatch(new CreateCarCommand($car))->last(HandledStamp::class)->getResult();
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            if(!$result['error']) {
-                $msg = 'Car created with id '.$result['id'];
-                $subject = 'Car created';
-
-                $bus->dispatch(new SendEmail($msg, $subject));
-            }
-
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
             return new JsonResponse(['error'=> $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -65,16 +57,8 @@ class CarController
                 return new JsonResponse(['error'=> 'bad params'], Response::HTTP_BAD_REQUEST);
             }
 
-            $result = $bus->dispatch(new UpdateCarCommand($id, $data))
-                ->last(HandledStamp::class)->getResult();
+            $result = $bus->dispatch(new UpdateCarCommand($id, $data))->last(HandledStamp::class)->getResult();
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
-
-            if(!$result['error']) {
-                $msg = 'Car updated with id ' . $result['id'];
-                $subject = 'Car updated';
-
-                $bus->dispatch(new SendEmail($msg, $subject));
-            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
@@ -91,13 +75,6 @@ class CarController
 
             $result = $bus->dispatch(new DeleteCarCommand($id))->last(HandledStamp::class)->getResult();
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
-
-            if(!$result['error']) {
-                $msg = 'Car deleted with id ' . $result['id'];
-                $subject = 'Car deleted';
-
-                $bus->dispatch(new SendEmail($msg, $subject));
-            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {

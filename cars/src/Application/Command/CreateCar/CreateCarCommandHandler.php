@@ -3,21 +3,22 @@
 namespace App\Application\Command\CreateCar;
 
 use App\Domain\Command\CommandHandlerInterface;
-use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Factory\CarRepoFactoryInterface;
+use App\Domain\Event\DomainEventDispatcherInterface;
+use App\Domain\Event\CarCreatedEvent;
 use DateTime;
 
 class CreateCarCommandHandler implements CommandHandlerInterface
 {
     private $carReadRepo;
     private $carWriteRepo;
-    private $cacheClient;
+    private $eventDispatcher;
 
-    public function __construct(CarRepoFactoryInterface $carRepoFactory, CacheFactoryInterface $cacheFactory)
+    public function __construct(CarRepoFactoryInterface $carRepoFactory, DomainEventDispatcherInterface $eventDispatcher)
     {
         $this->carReadRepo = $carRepoFactory->getCarReadRepo();
         $this->carWriteRepo = $carRepoFactory->getCarWriteRepo();
-        $this->cacheClient = $cacheFactory->getCache();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(CreateCarCommand $createCarCommand): array
@@ -31,7 +32,7 @@ class CreateCarCommandHandler implements CommandHandlerInterface
             $this->carReadRepo->save($createCarCommand->car);
         }
 
-        $this->cacheClient->putIndex($createCarCommand->car->toArray(), 'car_'.$createCarCommand->car->getId());
+        $this->eventDispatcher->dispatch(new CarCreatedEvent($createCarCommand->car));
 
         return ['error' => false, 'status' => 'car created!', 'id' => $createCarCommand->car->getId()];
     }

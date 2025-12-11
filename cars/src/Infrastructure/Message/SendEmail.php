@@ -2,16 +2,12 @@
 
 namespace App\Infrastructure\Message;
 
-class SendEmail
+use App\Domain\Message\EmailMessageInterface;
+
+class SendEmail implements EmailMessageInterface
 {
     private $msg;
     private $subject;
-
-    public function __construct(string $msg, string $subject)
-    {
-        $this->msg = $msg;
-        $this->subject = $subject;
-    }
 
     /**
      * @return string
@@ -21,11 +17,21 @@ class SendEmail
         return $this->msg;
     }
 
+    public function setMsg(string $msg): void
+    {
+        $this->msg = $msg;
+    }
+
     /**
      * @return string
      */
     public function getSubject(): string
     {
         return $this->subject;
+    }
+
+    public function setSubject(string $subject): void
+    {
+        $this->subject = $subject;
     }
 }

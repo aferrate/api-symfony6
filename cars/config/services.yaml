@@ -43,6 +43,8 @@ services:
     App\Domain\Cache\CacheInterface $cacheRedis: '@App\Infrastructure\Services\CacheRedis'
     App\Domain\Cache\CacheInterface $cacheLogger: '@App\Infrastructure\Services\CacheDecoratorLog'
 
+    App\Domain\Mail\EmailMessageInterface $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+
     _instanceof:
         App\Domain\Command\CommandHandlerInterface:
             tags:
@@ -78,6 +80,29 @@ services:
                 method: onAuthenticationSuccessResponse,
                 priority: -1000,
             }
+
+    App\Domain\EventListener\CarCreatedEventListener:
+        arguments:
+            $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Domain\Event\CarCreatedEvent', method: 'onCarCreated' }
+
+    App\Domain\EventListener\CarUpdatedEventListener:
+        arguments:
+            $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Domain\Event\CarUpdatedEvent', method: 'onCarUpdated' }
+
+    App\Domain\EventListener\CarDeletedEventListener:
+        arguments:
+            $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Domain\Event\CarDeletedEvent', method: 'onCarDeleted' }
+
+    App\Infrastructure\Event\SymfonyEventDispatcher:
+        arguments:
+            $eventDispatcher: '@event_dispatcher'
+        public: true
 
     App\Infrastructure\Bus\CommandBus:
         public: true

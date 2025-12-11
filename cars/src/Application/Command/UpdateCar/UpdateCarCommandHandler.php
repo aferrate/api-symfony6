@@ -2,23 +2,24 @@
 
 namespace App\Application\Command\UpdateCar;
 
-use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\CarRepoFactoryInterface;
 use DateTime;
 use App\Domain\Exception\CarNotFoundException;
+use App\Domain\Event\DomainEventDispatcherInterface;
+use App\Domain\Event\CarUpdatedEvent;
 
 class UpdateCarCommandHandler implements CommandHandlerInterface
 {
     private $carReadRepo;
     private $carWriteRepo;
-    private $cacheClient;
+    private $eventDispatcher;
 
-    public function __construct(CarRepoFactoryInterface $carRepoFactory, CacheFactoryInterface $cacheFactory)
+    public function __construct(CarRepoFactoryInterface $carRepoFactory, DomainEventDispatcherInterface $eventDispatcher)
     {
         $this->carReadRepo = $carRepoFactory->getCarReadRepo();
         $this->carWriteRepo = $carRepoFactory->getCarWriteRepo();
-        $this->cacheClient = $cacheFactory->getCache();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(UpdateCarCommand $updateCarCommand): array
@@ -39,8 +40,7 @@ class UpdateCarCommandHandler implements CommandHandlerInterface
             $this->carReadRepo->update($car);
         }
 
-        $this->cacheClient->deleteIndex('car_'.$car->getId());
-        $this->cacheClient->putIndex($car->toArray(), 'car_'.$car->getId());
+        $this->eventDispatcher->dispatch(new CarUpdatedEvent($car));
 
         return ['error' => false, 'status' => 'car updated!', 'id' => $car->getId()];
     }
