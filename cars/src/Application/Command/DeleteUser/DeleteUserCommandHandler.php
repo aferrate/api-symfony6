@@ -2,22 +2,23 @@
 
 namespace App\Application\Command\DeleteUser;
 
-use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\UserRepoFactoryInterface;
 use App\Domain\Exception\UserNotFoundException;
+use App\Domain\Event\UserDeletedEvent;
+use App\Domain\Event\DomainEventDispatcherInterface;
 
 class DeleteUserCommandHandler implements CommandHandlerInterface
 {
     private $userReadRepo;
     private $userWriteRepo;
-    private $cacheClient;
+    private $eventDispatcher;
 
-    public function __construct(UserRepoFactoryInterface $userRepoFactory, CacheFactoryInterface $cacheFactory)
+    public function __construct(UserRepoFactoryInterface $userRepoFactory, DomainEventDispatcherInterface $eventDispatcher)
     {
         $this->userReadRepo = $userRepoFactory->getUserReadRepo();
         $this->userWriteRepo = $userRepoFactory->getUserWriteRepo();
-        $this->cacheClient = $cacheFactory->getCache();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(DeleteUserCommand $deleteUserCommand): array
@@ -34,7 +35,7 @@ class DeleteUserCommandHandler implements CommandHandlerInterface
             $this->userReadRepo->delete($user);
         }
 
-        $this->cacheClient->deleteIndex('user_'.$user->getEmail());
+        $this->eventDispatcher->dispatch(new UserDeletedEvent($user->getId()));
 
         return ['error' => false, 'status' => 'user deleted!', 'id' => $user->getId()];
     }

@@ -13,7 +13,6 @@ use App\Application\Command\UpdateUser\UpdateUserCommand;
 use App\Application\Command\DeleteUser\DeleteUserCommand;
 use App\Application\Query\GetAllUsers\GetAllUsersQuery;
 use App\Application\Query\GetUserFromEmail\GetUserFromEmailQuery;
-use App\Infrastructure\Message\SendEmail;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Exception;
 
@@ -39,14 +38,8 @@ class UserController
             $user = $user->buildUserFromArray($user, $data);
 
             $result = $bus->dispatch(new CreateUserCommand($user))->last(HandledStamp::class)->getResult();
+
             $status = ($result['error']) ? Response::HTTP_BAD_REQUEST : Response::HTTP_CREATED;
-
-            if(!$result['error']) {
-                $msg = 'User created with id ' . $result['id'];
-                $subject = 'User created';
-
-                $bus->dispatch(new SendEmail($msg, $subject));
-            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
@@ -70,13 +63,6 @@ class UserController
                 ->last(HandledStamp::class)->getResult();
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
-            if(!$result['error']) {
-                $msg = 'User updated with id '.$result['id'];
-                $subject = 'User updated';
-
-                $bus->dispatch(new SendEmail($msg, $subject));
-            }
-
             return new JsonResponse($result, $status);
         } catch (Exception $e) {
             return new JsonResponse(['error'=> $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -91,14 +77,8 @@ class UserController
             }
 
             $result = $bus->dispatch(new DeleteUserCommand($email))->last(HandledStamp::class)->getResult();
+
             $status = ($result['error']) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
-
-            if(!$result['error']) {
-                $msg = 'User deleted with id ' . $result['id'];
-                $subject = 'User deleted';
-
-                $bus->dispatch(new SendEmail($msg, $subject));
-            }
 
             return new JsonResponse($result, $status);
         } catch (Exception $e) {

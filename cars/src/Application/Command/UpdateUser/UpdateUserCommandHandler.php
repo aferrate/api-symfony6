@@ -2,23 +2,24 @@
 
 namespace App\Application\Command\UpdateUser;
 
-use App\Domain\Factory\CacheFactoryInterface;
 use App\Domain\Command\CommandHandlerInterface;
 use App\Domain\Factory\UserRepoFactoryInterface;
 use App\Domain\Exception\UserNotFoundException;
 use App\Domain\Exception\EmailAlreadyInUseException;
+use App\Domain\Event\UserUpdatedEvent;
+use App\Domain\Event\DomainEventDispatcherInterface;
 
 class UpdateUserCommandHandler implements CommandHandlerInterface
 {
     private $userReadRepo;
     private $userWriteRepo;
-    private $cacheClient;
+    private $eventDispatcher;
 
-    public function __construct(UserRepoFactoryInterface $userRepoFactory, CacheFactoryInterface $cacheFactory)
+    public function __construct(UserRepoFactoryInterface $userRepoFactory, DomainEventDispatcherInterface $eventDispatcher)
     {
         $this->userReadRepo = $userRepoFactory->getUserReadRepo();
         $this->userWriteRepo = $userRepoFactory->getUserWriteRepo();
-        $this->cacheClient = $cacheFactory->getCache();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(UpdateUserCommand $updateUserCommand): array
@@ -33,8 +34,6 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
             throw new EmailAlreadyInUseException();
         }
 
-        $this->cacheClient->deleteIndex('user_'.$user->getEmail());
-
         $user->setEmail($updateUserCommand->user->getEmail());
         $user->setPassword($updateUserCommand->user->getPassword());
 
@@ -46,7 +45,7 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
             $this->userReadRepo->update($updateUserCommand->user);
         }
 
-        $this->cacheClient->putIndex($user->toArray(), 'user_'.$user->getEmail());
+        $this->eventDispatcher->dispatch(new UserUpdatedEvent($user));
 
         return ['error' => false, 'status' => 'user updated!', 'id' => $user->getId()];
     }

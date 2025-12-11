@@ -81,6 +81,24 @@ services:
                 priority: -1000,
             }
 
+    App\Domain\EventListener\UserCreatedEventListener:
+        arguments:
+            $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Domain\Event\UserCreatedEvent', method: 'onUserCreated' }
+
+    App\Domain\EventListener\UserUpdatedEventListener:
+        arguments:
+            $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Domain\Event\UserUpdatedEvent', method: 'onUserUpdated' }
+
+    App\Domain\EventListener\UserDeletedEventListener:
+        arguments:
+            $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Domain\Event\UserDeletedEvent', method: 'onUserDeleted' }
+
     App\Domain\EventListener\CarCreatedEventListener:
         arguments:
             $sendEmailMessage: '@App\Infrastructure\Message\SendEmail'
