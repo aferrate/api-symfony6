@@ -67,6 +67,7 @@ class User
      */
     public function buildUserFromArray(User $user, array $arrayUser): User
     {
+        $user->setId($arrayUser['id']);
         $user->setEmail($arrayUser['email']);
         $user->setPassword($arrayUser['password']);
 

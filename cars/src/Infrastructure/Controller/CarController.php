@@ -16,6 +16,7 @@ use App\Application\Query\GetCarFromId\GetCarFromIdQuery;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Exception;
 use App\Domain\Validator\Request\Car\ValidatorCarRequestInterface;
+use Ramsey\Uuid\Uuid;
 
 class CarController
 {
@@ -35,8 +36,9 @@ class CarController
                 return new JsonResponse(['error'=> 'bad params'], Response::HTTP_BAD_REQUEST);
             }
 
-            $car = Car::createCar();
-            $data['id'] = $car->getId();
+            $idCar = Uuid::uuid4();
+            $car = Car::createCar($idCar);
+            $data['id'] = $idCar;
             $car = $car->buildCarFromArray($car, $data);
 
             $result = $bus->dispatch(new CreateCarCommand($car))->last(HandledStamp::class)->getResult();

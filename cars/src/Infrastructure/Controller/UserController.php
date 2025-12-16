@@ -15,6 +15,7 @@ use App\Application\Query\GetAllUsers\GetAllUsersQuery;
 use App\Application\Query\GetUserFromEmail\GetUserFromEmailQuery;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class UserController
 {
@@ -34,7 +35,9 @@ class UserController
                 return new JsonResponse(['error'=> 'bad params'], Response::HTTP_BAD_REQUEST);
             }
 
-            $user = User::createUser();
+            $idUser = Uuid::uuid4();
+            $user = User::createUser($idUser);
+            $data['id'] = $idUser;
             $user = $user->buildUserFromArray($user, $data);
 
             $result = $bus->dispatch(new CreateUserCommand($user))->last(HandledStamp::class)->getResult();

@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Entity;
 
 use App\Domain\Model\Car as DomainCar;
-use Ramsey\Uuid\Uuid;
 
 class Car extends DomainCar
 {
@@ -13,11 +12,12 @@ class Car extends DomainCar
     }
 
     /**
+     * @param string $idCar
      * @return Car
      */
-    static public function createCar(): Car
+    static public function createCar(string $idCar): Car
     {
-        $car = new Car(Uuid::uuid4());
+        $car = new Car($idCar);
 
         return $car;
     }

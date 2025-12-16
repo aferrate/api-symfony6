@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Entity;
 
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Domain\Model\User as DomainUser;
@@ -67,11 +66,12 @@ class User extends DomainUser implements UserInterface, PasswordAuthenticatedUse
     }
 
     /**
+     * @param string $idUser
      * @return User
      */
-    static public function createUser(): User
+    static public function createUser(string $idUser): User
     {
-        $user = new User(Uuid::uuid4());
+        $user = new User($idUser);
 
         return $user;
     }
