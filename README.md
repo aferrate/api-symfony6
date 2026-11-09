@@ -7,12 +7,31 @@
 - [x] Read and write DBs
 - [x] DDD approach
 - [x] CQRS approach
+- [x] Local IA assist
 
 ### Start application:
 ```
 cd laradock
 cp .env.example .env
 sudo docker-compose up -d nginx mysql phpmyadmin redis mailhog elasticsearch rabbitmq php-fpm redis-webui
+```
+
+### Setup ollama for local IA assist:
+```
+- Uncomment on docker-compose.yml ollama amd block or nvidia depending on your graphic card
+- You only need to download the model first time unless you delete volume or model in ollama container
+
+sudo docker-compose up -d ollama
+sudo docker exec ollama ollama pull qwen3:8b
+sudo docker exec ollama ollama run qwen3:8b
+
+- You can download more models and test them but qwen3:8b works fine, depending on you graphic card you may need to change opencode.json context value
+```
+
+### Start opencode for local IA assist:
+```
+sudo docker-compose exec workspace bash
+opencode
 ```
 
 ### Start xdebug:

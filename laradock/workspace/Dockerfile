@@ -1879,6 +1879,10 @@ RUN if [ ${INSTALL_GITHUB_CLI} = true ]; then \
     && apt install gh -y \
 ;fi
 
+###########################################################################
+# OpenCode CLI
+###########################################################################
+RUN curl -fsSL https://opencode.ai/install | OPENCODE_INSTALL_DIR=/usr/local/bin bash
 
 #
 #--------------------------------------------------------------------------

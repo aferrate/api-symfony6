@@ -52,6 +52,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   react:
     driver: ${VOLUMES_DRIVER}
+  ollama:
+    driver: ${VOLUMES_DRIVER}
 
 services:
 
@@ -2246,3 +2248,60 @@ services:
       networks:
         - frontend
         - backend
+
+  ### Ollama AMD ROCm ######################################
+  # ollama:
+  #   image: ollama/ollama:rocm
+  #   container_name: ollama
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   devices:
+  #     - /dev/kfd:/dev/kfd
+  #     - /dev/dri:/dev/dri
+  #   environment:
+  #     - HIP_VISIBLE_DEVICES=0
+  #     - OLLAMA_HOST=0.0.0.0:11434
+  #     - OLLAMA_KEEP_ALIVE=5m
+  #     - OLLAMA_CONTEXT_LENGTH=32768
+  #   ports:
+  #     - 11434:11434
+  #   healthcheck:
+  #     test: ["CMD", "ollama", "list"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
+  #   networks:
+  #     - backend
+
+  ### Ollama NVIDIA CUDA ######################################
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: all
+  #             capabilities: [gpu]
+  #   environment:
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #     - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+  #     - OLLAMA_HOST=0.0.0.0:11434
+  #     - OLLAMA_KEEP_ALIVE=5m
+  #     - OLLAMA_CONTEXT_LENGTH=32768
+  #   ports:
+  #     - 11434:11434
+  #   healthcheck:
+  #     test: ["CMD", "ollama", "list"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
+  #   networks:
+  #     - backend
